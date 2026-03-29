@@ -687,8 +687,8 @@ def api_ics(dk, year, section):
             pt = PT[p-1]
             lines += ['BEGIN:VEVENT',
                       f'UID:mrce-{dk}-{year}-{sec}-{d}-{p}-{uid}@mrce.in',
-                      f'DTSTART:20250106T{pt[0]}',f'DTEND:20250106T{pt[1]}',
-                      f'RRULE:FREQ=WEEKLY;BYDAY={BD[d]}',f'SUMMARY:{sl["subject"]}']
+                      f'DTSTART:20251201T{pt[0]}',f'DTEND:20251201T{pt[1]}',
+                      f'RRULE:FREQ=WEEKLY;BYDAY={BD[d]};UNTIL=20260430T235959Z',f'SUMMARY:{sl["subject"]}']
             if sl.get('faculty_id'): lines.append(f'DESCRIPTION:Faculty: {fac_list.get(sl["faculty_id"], sl["faculty_id"])}')
             if sl.get('room'): lines.append(f'LOCATION:{sl["room"]}')
             lines.append('END:VEVENT'); uid += 1
