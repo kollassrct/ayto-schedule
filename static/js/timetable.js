@@ -67,7 +67,7 @@ function renderLegend() {
 }
 
 function getCalendarLink() {
-  const base = window.location.origin;
+  const base = window.location.origin.replace('https://', 'webcal://');
   return `${base}/calendar/${Store.deptKey()}/${_selYear}/${_selSec}`;
 }
 
