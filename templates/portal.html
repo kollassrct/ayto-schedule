@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Faculty Portal — MRCE Smart Timetable</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div id="toast"></div>
+<div id="load-overlay"><div class="spinner"></div><span id="load-text" style="color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:2px">LOADING...</span></div>
+
+<div class="topbar">
+  <div class="flex-row">
+    <div>
+      <div class="brand-sub">FACULTY PORTAL · MRCE</div>
+      <div class="brand-name" id="portal-name">LOADING...</div>
+    </div>
+  </div>
+  <div class="flex-row">
+    <span class="dept-name" id="portal-dept"></span>
+    <a href="/logout" class="btn btn-secondary btn-sm">LOGOUT</a>
+  </div>
+</div>
+<div class="dept-stripe"></div>
+
+<div class="page">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">PERIODS / WEEK</div><div class="stat-value" style="color:var(--accent)"    id="p-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">SECTIONS</div>      <div class="stat-value" style="color:var(--accent2)"   id="p-secs">—</div></div>
+    <div class="stat-card"><div class="stat-label">SUBJECTS</div>      <div class="stat-value" style="color:var(--success)"   id="p-subjs">—</div></div>
+    <div class="stat-card"><div class="stat-label">TIMETABLE</div>     <div class="stat-value" id="p-status" style="font-size:18px;margin-top:6px">—</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>DAILY WORKLOAD</span></div>
+    <div class="wl-bars" id="wl-bars">
+      <div class="empty-state">Loading...</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>MY ASSIGNMENTS</span></div>
+    <div class="flex-row" id="assignments-list">Loading...</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span>MY WEEKLY TIMETABLE</span></div>
+    <div id="fac-timetable"><div class="empty-state">Loading...</div></div>
+  </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/portal.js"></script>
+</body>
+</html>

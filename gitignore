@@ -1,0 +1,20 @@
+# Database (Railway uses Volume for persistence)
+database.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Ngrok binary
+ngrok.exe

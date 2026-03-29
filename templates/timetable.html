@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Timetable — MRCE Smart Timetable</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div id="toast"></div>
+<div id="load-overlay"><div class="spinner"></div><span id="load-text" style="color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:2px">LOADING...</span></div>
+
+<div class="topbar">
+  <div class="flex-row">
+    <div style="margin-right:16px">
+      <div class="brand-sub">HOD DASHBOARD</div>
+      <div class="brand-name">MRCE SMART TIMETABLE</div>
+    </div>
+    <nav class="nav-tabs" id="topbar-tabs"></nav>
+  </div>
+  <div class="flex-row">
+    <span class="dept-badge" id="topbar-badge"></span>
+    <span class="dept-name"  id="topbar-dept"></span>
+    <a href="/logout" class="btn btn-secondary btn-sm">LOGOUT</a>
+  </div>
+</div>
+<div class="dept-stripe"></div>
+
+<div class="page">
+  <!-- Year + Section selectors -->
+  <div class="flex-row mb-12" id="year-pills"></div>
+  <div class="flex-row mb-16" id="sec-pills"></div>
+
+  <!-- Timetable grid -->
+  <div class="card mb-12">
+    <div class="card-title">
+      <span id="tt-title">SELECT YEAR AND SECTION</span>
+      <div class="flex-row">
+        <button class="btn btn-sm btn-warn" onclick="exportICS()">📥 DOWNLOAD .ICS</button>
+      </div>
+    </div>
+    <div id="tt-grid"><div class="empty-state">⚡ Generate timetable from Dashboard first</div></div>
+  </div>
+
+  <!-- WhatsApp share -->
+  <div class="card mb-12">
+    <div class="card-title"><span>💬 SHARE VIA WHATSAPP</span></div>
+    <div id="wa-section">
+      <div class="wa-box">
+        <div class="wa-title">📱 WHATSAPP MESSAGE — READY TO COPY</div>
+        <div class="wa-msg" id="wa-msg">Select a year and section to generate the share message.</div>
+        <div class="flex-row mt-8">
+          <button class="wa-btn" onclick="copyWA()">📋 COPY MESSAGE</button>
+          <button class="btn btn-sm btn-ghost" onclick="copyLink()">🔗 COPY LINK ONLY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="card">
+    <div class="card-title"><span>SUBJECT LEGEND</span></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/timetable.js"></script>
+</body>
+</html>

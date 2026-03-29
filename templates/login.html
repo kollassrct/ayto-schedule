@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Login — MRCE Smart Timetable</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div id="toast"></div>
+<div id="load-overlay">
+  <div class="spinner"></div>
+  <span id="load-text" style="color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:2px">LOADING...</span>
+</div>
+
+<div class="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-icon">🎓</div>
+      <div style="color:var(--accent);font-size:9px;letter-spacing:4px;font-family:var(--mono)">MALLA REDDY COLLEGE OF ENGINEERING</div>
+      <div class="login-title">SMART TIMETABLE</div>
+      <div class="login-sub">MULTI-DEPARTMENT MANAGER v4.0</div>
+    </div>
+    <div class="login-card">
+      <div class="login-tabs">
+        <button class="login-tab active" id="tab-hod"     onclick="switchTab('hod')">🏛 HOD LOGIN</button>
+        <button class="login-tab"        id="tab-faculty" onclick="switchTab('faculty')">👤 FACULTY LOGIN</button>
+      </div>
+      <div class="login-body">
+
+        <!-- HOD PANEL -->
+        <div id="panel-hod">
+          <div class="form-group">
+            <label class="form-label">HOD USERNAME</label>
+            <input class="form-input" id="hod-user" placeholder="e.g. hodcse" autocomplete="username"
+                   onkeydown="if(event.key==='Enter') hodLogin()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">PASSWORD</label>
+            <input class="form-input" type="password" id="hod-pass" placeholder="Password"
+                   autocomplete="current-password" onkeydown="if(event.key==='Enter') hodLogin()"/>
+          </div>
+          <div class="login-hint">
+            hodcse / <span>cse@123</span> &nbsp;|&nbsp; hodcsd / <span>csd@123</span><br>
+            hodcsm / <span>csm@123</span> &nbsp;|&nbsp; hodh&amp;s / <span>hs@123</span> &nbsp;|&nbsp; hodece / <span>ece@123</span>
+          </div>
+          <div id="hod-err" class="login-err"></div>
+          <button class="btn-hod" onclick="hodLogin()">LOGIN AS HOD →</button>
+        </div>
+
+        <!-- FACULTY PANEL -->
+        <div id="panel-faculty" style="display:none">
+          <div class="form-group">
+            <label class="form-label">SELECT DEPARTMENT</label>
+            <select class="form-input" id="fac-dept" onchange="loadFacultyList()">
+              <option value="">— Choose department —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">SELECT YOUR NAME</label>
+            <select class="form-input" id="fac-name">
+              <option value="">— Choose department first —</option>
+            </select>
+          </div>
+          <div id="fac-err" class="login-err"></div>
+          <button class="btn-fac" onclick="facLogin()">LOGIN AS FACULTY →</button>
+        </div>
+
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:1px">
+      MRCE · timetable.mrce.in · Academic Scheduling System
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script>
+  // Clear old session
+  Store.clear();
+
+  // Load department list on page load
+  (async function() {
+    try {
+      const depts = await apiGet('/api/departments');
+      const sel = document.getElementById('fac-dept');
+      depts.forEach(d => sel.innerHTML += `<option value="${d.key}">${esc(d.name)}</option>`);
+    } catch(e) { console.error(e); }
+  })();
+
+  function switchTab(tab) {
+    document.getElementById('tab-hod').classList.toggle('active',     tab === 'hod');
+    document.getElementById('tab-faculty').classList.toggle('active', tab === 'faculty');
+    document.getElementById('panel-hod').style.display     = tab === 'hod'     ? 'block' : 'none';
+    document.getElementById('panel-faculty').style.display = tab === 'faculty' ? 'block' : 'none';
+    if (tab === 'hod') document.getElementById('hod-user').focus();
+  }
+
+  async function loadFacultyList() {
+    const dk  = document.getElementById('fac-dept').value;
+    const sel = document.getElementById('fac-name');
+    sel.innerHTML = '<option value="">Loading...</option>';
+    if (!dk) { sel.innerHTML = '<option value="">— Choose department first —</option>'; return; }
+    try {
+      const fac = await apiGet(`/api/dept/${dk}/faculty`);
+      sel.innerHTML = '<option value="">— Choose your name —</option>'
+        + fac.map(f => `<option value="${f.id}">${esc(f.name)}</option>`).join('');
+    } catch(e) { sel.innerHTML = '<option value="">Error loading</option>'; }
+  }
+
+  async function hodLogin() {
+    const username = document.getElementById('hod-user').value.trim();
+    const password = document.getElementById('hod-pass').value;
+    const errEl = document.getElementById('hod-err');
+    errEl.textContent = '';
+    if (!username || !password) { errEl.textContent = '❌ Enter username and password'; return; }
+    showLoad('AUTHENTICATING...');
+    try {
+      const r = await apiPost('/api/auth/login', { type: 'hod', username, password });
+      Store.set('user', { type: 'hod', deptKey: r.deptKey, deptName: r.deptName });
+      window.location.href = '/dashboard';
+    } catch(e) {
+      hideLoad();
+      errEl.textContent = '❌ ' + e.message;
+    }
+  }
+
+  async function facLogin() {
+    const deptKey  = document.getElementById('fac-dept').value;
+    const facultyId = document.getElementById('fac-name').value;
+    const errEl = document.getElementById('fac-err');
+    errEl.textContent = '';
+    if (!deptKey || !facultyId) { errEl.textContent = '❌ Select department and your name'; return; }
+    showLoad('LOADING...');
+    try {
+      const r = await apiPost('/api/auth/login', { type: 'faculty', deptKey, facultyId });
+      Store.set('user', { type: 'faculty', deptKey: r.deptKey, id: r.id, name: r.name });
+      window.location.href = '/portal';
+    } catch(e) {
+      hideLoad();
+      errEl.textContent = '❌ ' + e.message;
+    }
+  }
+</script>
+</body>
+</html>

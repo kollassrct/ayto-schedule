@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Faculty — MRCE Smart Timetable</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div id="toast"></div>
+<div id="load-overlay"><div class="spinner"></div><span id="load-text" style="color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:2px">LOADING...</span></div>
+
+<!-- MODAL -->
+<div id="modal-backdrop" class="modal-backdrop" onclick="modalBg(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">EDIT FACULTY</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="flex-row">
+    <div style="margin-right:16px">
+      <div class="brand-sub">HOD DASHBOARD</div>
+      <div class="brand-name">MRCE SMART TIMETABLE</div>
+    </div>
+    <nav class="nav-tabs" id="topbar-tabs"></nav>
+  </div>
+  <div class="flex-row">
+    <span class="dept-badge" id="topbar-badge"></span>
+    <span class="dept-name"  id="topbar-dept"></span>
+    <a href="/logout" class="btn btn-secondary btn-sm">LOGOUT</a>
+  </div>
+</div>
+<div class="dept-stripe"></div>
+
+<div class="page">
+  <div class="flex-row mb-12">
+    <span style="color:var(--muted);font-size:11px;font-family:var(--mono);letter-spacing:2px" id="fac-count">FACULTY ROSTER</span>
+    <div class="ml-auto">
+      <button class="btn btn-primary" onclick="openAdd()">+ ADD FACULTY</button>
+    </div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="tt-wrap">
+      <table class="fac-table" id="fac-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>NAME</th><th>YEAR</th><th>SUBJECTS</th>
+            <th>SECTIONS</th><th>WORKLOAD/WEEK</th><th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="fac-tbody">
+          <tr><td colspan="7" class="empty-state">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Expanded view -->
+  <div id="view-panel" style="display:none" class="card mt-12">
+    <div class="card-title" id="view-title">FACULTY TIMETABLE</div>
+    <div id="view-grid"></div>
+  </div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/faculty.js"></script>
+</body>
+</html>

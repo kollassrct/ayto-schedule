@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dashboard — MRCE Smart Timetable</title>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<div id="toast"></div>
+<div id="load-overlay"><div class="spinner"></div><span id="load-text" style="color:var(--text);font-family:var(--mono);font-size:13px;letter-spacing:2px">LOADING...</span></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="flex-row">
+    <div style="margin-right:16px">
+      <div class="brand-sub">HOD DASHBOARD</div>
+      <div class="brand-name">MRCE SMART TIMETABLE</div>
+    </div>
+    <nav class="nav-tabs" id="topbar-tabs"></nav>
+  </div>
+  <div class="flex-row">
+    <span class="dept-badge" id="topbar-badge"></span>
+    <span class="dept-name"  id="topbar-dept"></span>
+    <a href="/logout" class="btn btn-secondary btn-sm">LOGOUT</a>
+  </div>
+</div>
+<div class="dept-stripe"></div>
+
+<div class="page" id="main">
+  <!-- Stats -->
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-label">SECTIONS</div><div class="stat-value" style="color:var(--accent)" id="st-sections">—</div></div>
+    <div class="stat-card"><div class="stat-label">FACULTY</div><div class="stat-value" style="color:var(--accent2)" id="st-faculty">—</div></div>
+    <div class="stat-card"><div class="stat-label">SLOTS SCHEDULED</div><div class="stat-value" style="color:var(--success)" id="st-slots">—</div></div>
+    <div class="stat-card"><div class="stat-label">STATUS</div><div class="stat-value" id="st-status" style="font-size:18px;margin-top:6px">PENDING</div></div>
+  </div>
+
+  <!-- Generate card -->
+  <div class="gen-card">
+    <div style="color:var(--muted);font-size:10px;letter-spacing:3px;font-family:var(--mono);margin-bottom:8px">CONSTRAINT-BASED TIMETABLE GENERATOR</div>
+    <div style="color:var(--text);font-size:13px;margin-bottom:6px" id="gen-summary">Loading department info...</div>
+    <div style="color:var(--muted);font-size:11px;margin-bottom:20px;line-height:1.9;font-family:var(--mono)">
+      Priority: Faculty clash → Lab rooms → Lab continuity → Same-lab-year → Importance-weighted theory<br>
+      Lab slots: P1-P2 · P4-P5 · P5-P6 &nbsp;|&nbsp; Max 1 lab/day/section &nbsp;|&nbsp; Max 3 simultaneous labs
+    </div>
+    <button class="gen-btn" id="gen-btn" onclick="generate()">⚡ GENERATE TIMETABLE</button>
+    <div id="gen-result" style="margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--success)"></div>
+  </div>
+
+  <!-- Subject cards per year -->
+  <div id="year-cards" class="grid-3"></div>
+</div>
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
